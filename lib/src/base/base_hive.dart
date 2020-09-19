@@ -25,8 +25,14 @@ abstract class BaseHive extends BaseDataProvider {
 class HiveImpl extends BaseHive {
   HiveImpl({@required String key, Box box, StreamController streamController}) {
     assert(key != null);
+
+    /// Current box key
     this._key = key;
+
+    /// Stream controller holds box data
     this._controller = streamController ?? StreamController.broadcast();
+
+    /// Current box
     this._box = box ?? init();
   }
 
@@ -43,6 +49,7 @@ class HiveImpl extends BaseHive {
   @override
   Iterable get values => _box == null ? [] : _box.values;
 
+  /// Init and open box with passed key.
   Future<void> init() async {
     _box = await Hive.openBox(_key);
   }
