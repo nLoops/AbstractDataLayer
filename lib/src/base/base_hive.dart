@@ -16,6 +16,9 @@ abstract class BaseHive extends BaseDataProvider {
 
   /// Dispose method for [StreamController].
   void dispose();
+
+  /// Clear box data
+  Future<void> clear();
 }
 
 /// An implementation of [BaseHive] logic.
@@ -85,4 +88,7 @@ class HiveImpl extends BaseHive {
   void dispose() {
     _controller?.close();
   }
+
+  @override
+  Future<void> clear() => _box.clear();
 }
