@@ -16,14 +16,23 @@ abstract class BaseHive extends BaseDataProvider {
 
   /// Dispose method for [StreamController].
   void dispose();
+
+  /// Clear box data
+  Future<void> clear();
 }
 
 /// An implementation of [BaseHive] logic.
 class HiveImpl extends BaseHive {
   HiveImpl({@required String key, Box box, StreamController streamController}) {
     assert(key != null);
+
+    /// Current box key
     this._key = key;
+
+    /// Stream controller holds box data
     this._controller = streamController ?? StreamController.broadcast();
+
+    /// Current box
     this._box = box ?? init();
   }
 
@@ -40,6 +49,7 @@ class HiveImpl extends BaseHive {
   @override
   Iterable get values => _box == null ? [] : _box.values;
 
+  /// Init and open box with passed key.
   Future<void> init() async {
     _box = await Hive.openBox(_key);
   }
@@ -72,7 +82,7 @@ class HiveImpl extends BaseHive {
   @override
   Future<Map> getSingleFuture(String uid) async {
     if (_box == null) await init();
-    return _box.get(uid);
+    return _box.get(uid, defaultValue: null);
   }
 
   @override
@@ -85,4 +95,7 @@ class HiveImpl extends BaseHive {
   void dispose() {
     _controller?.close();
   }
+
+  @override
+  Future<void> clear() => _box.clear();
 }
