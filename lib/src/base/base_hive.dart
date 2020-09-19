@@ -4,7 +4,7 @@ import 'package:abstract_data_layer/src/base/base_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
-abstract class BaseHive extends BaseDataProvider {
+abstract class BaseHive extends BaseCrudOperations {
   /// Getter of current box for more operations, not covered here.
   Box get box;
 
@@ -19,6 +19,12 @@ abstract class BaseHive extends BaseDataProvider {
 
   /// Clear box data
   Future<void> clear();
+
+  /// Query item by UID
+  Future<Map> getSingleFuture(String uid);
+
+  /// Get stream of items
+  Stream<Iterable<dynamic>> getStreamList();
 }
 
 /// An implementation of [BaseHive] logic.
@@ -77,23 +83,13 @@ class HiveImpl extends BaseHive {
   }
 
   @override
-  Future<List<Map>> getFutureList() async {
-    if (_box == null) await init();
-    var list = <Map>[];
-    return _box.values.map((e) => list.add(e)).toList();
-  }
-
-  @override
   Future<Map> getSingleFuture(String uid) async {
     if (_box == null) await init();
     return _box.get(uid, defaultValue: null);
   }
 
   @override
-  Stream<List<Map>> getStreamList() {
-    getFutureList().then((data) => _controller.add(data));
-    return _controller.stream;
-  }
+  Stream<Iterable<dynamic>> getStreamList() => Stream.value(values);
 
   @override
   void dispose() {
