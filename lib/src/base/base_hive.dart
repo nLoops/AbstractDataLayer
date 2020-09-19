@@ -33,7 +33,11 @@ class HiveImpl extends BaseHive {
     this._controller = streamController ?? StreamController.broadcast();
 
     /// Current box
-    this._box = box ?? init();
+    if (box == null) {
+      init();
+    } else {
+      this._box = box;
+    }
   }
 
   StreamController _controller;
