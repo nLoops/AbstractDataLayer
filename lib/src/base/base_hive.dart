@@ -82,7 +82,7 @@ class HiveImpl extends BaseHive {
   @override
   Future<Map> getSingleFuture(String uid) async {
     if (_box == null) await init();
-    return _box.get(uid);
+    return _box.get(uid, defaultValue: null);
   }
 
   @override
