@@ -89,7 +89,10 @@ class HiveImpl extends BaseHive {
   }
 
   @override
-  Stream<Iterable<dynamic>> getStreamList() => Stream.value(values);
+  Stream<Iterable<dynamic>> getStreamList() async* {
+    if (_box == null) await init();
+    yield* Stream.value(_box.values);
+  }
 
   @override
   void dispose() {
