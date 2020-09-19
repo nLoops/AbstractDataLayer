@@ -4,13 +4,13 @@ import 'package:abstract_data_layer/src/base/base_data_type.dart';
 /// Base CRUD operations to be implemented by [BaseFireStore] and [BaseHive]
 abstract class BaseDataProvider<T extends BaseDataType> {
   /// Returns a future list of object
-  Future<List<T>> getFutureList();
+  Future<List<Map>> getFutureList();
 
   /// Returns stream of list of object
-  Stream<List<T>> getStreamList();
+  Stream<List<Map>> getStreamList();
 
   /// Query single object by passing uid
-  Future<T> getSingleFuture(String uid);
+  Future<Map> getSingleFuture(String uid);
 
   /// Insert new record
   Future<void> insert(String uid, Map<String, dynamic> data);
