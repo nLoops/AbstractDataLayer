@@ -1,14 +1,13 @@
 import 'package:abstract_data_layer/src/base/base_data_type.dart';
 
-/// Sample object to test [BaseDataType]
-class Sample extends BaseDataType {
+class Sample {
   String uid;
   String title;
   int qty;
 
   Sample({this.uid, this.title, this.qty});
 
-  factory Sample._fromMap(Map<dynamic, dynamic> map) {
+  factory Sample.fromMap(Map<dynamic, dynamic> map) {
     return new Sample(
       uid: map['uid'] as String,
       title: map['title'] as String,
@@ -16,7 +15,7 @@ class Sample extends BaseDataType {
     );
   }
 
-  Map<String, dynamic> _toMap() {
+  Map<String, dynamic> toMap() {
     // ignore: unnecessary_cast
     return {
       'uid': this.uid,
@@ -24,10 +23,4 @@ class Sample extends BaseDataType {
       'qty': this.qty,
     } as Map<String, dynamic>;
   }
-
-  @override
-  Map<String, dynamic> convertToMap() => _toMap();
-
-  @override
-  getFromMap(Map<dynamic, dynamic> data) => Sample._fromMap(data);
 }
