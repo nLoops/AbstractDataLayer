@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hive/hive.dart';
 import 'package:mockito/mockito.dart';
 
+// Firebase Mocks
 class FireStoreMock extends Mock implements FirebaseFirestore {}
 
 class CollectionReferenceMock extends Mock implements CollectionReference {}
@@ -83,3 +87,21 @@ class DocumentReferenceMock extends Mock implements DocumentReference {
     return null;
   }
 }
+
+// Hive Mocks
+class HiveBoxMock extends Mock implements Box {
+  HiveBoxMock(this.data);
+
+  List<Map> data;
+
+  @override
+  Iterable get values => data;
+
+  @override
+  Future<void> put(key, value) => data[0][key] = value;
+
+  @override
+  Future<void> delete(key) => data[0].remove(key);
+}
+
+class StreamControllerMock extends Mock implements StreamController {}
