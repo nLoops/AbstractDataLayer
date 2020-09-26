@@ -36,12 +36,9 @@ class AuthProvider {
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  StreamController<int> verifyStream = StreamController.broadcast();
   String verID = '';
 
-  void dispose() {
-    verifyStream?.close();
-  }
+  void dispose() {}
 
   User get firebaseUser => _firebaseAuth.currentUser;
 
@@ -49,44 +46,46 @@ class AuthProvider {
 
   Future<void> signOut() => _firebaseAuth.signOut();
 
-  Future<void> verifyPhoneNumber(String phoneNo) async {
+  Stream<int> verifyPhoneNumber(String phoneNo) async* {
+    StreamController<int> eventStream = StreamController();
+
     // first check if the user entered a valid phone number
     bool isValidPhone = isValidPhoneNumber(phoneNo);
 
     // if not method yield a not valid phone.
     if (!isValidPhone) {
-      verifyStream.add(kNotValidPhoneNo);
-      //verifyStream.close();
+      eventStream.add(kNotValidPhoneNo);
+      eventStream.close();
     } else {
       // In case phone verification completed required
       final phoneVerificationCompleted = (AuthCredential authCredential) async {
         bool authResult = await authWithCredential(authCredential);
 
         if (authResult) {
-          verifyStream.add(kVComplete);
+          eventStream.add(kVComplete);
         } else {
-          verifyStream.add(kVFailed);
+          eventStream.add(kVFailed);
         }
-        //verifyStream.close();
+        eventStream.close();
       };
 
       // In case phone verification failed
       final phoneVerificationFailed = (FirebaseAuthException exception) {
         logAuth('Auth failed with exception \n ${exception.message}');
-        verifyStream.add(kVFailed);
-        //verifyStream.close();
+        eventStream.add(kVFailed);
+        eventStream.close();
       };
 
       // When OTP sent to the user device
       final otpSent = (String verId, [int forceResent]) {
         this.verID = verId;
-        verifyStream.add(kVCodeSent);
+        eventStream.add(kVCodeSent);
       };
 
       // When the timeout reached without receiving OTP
       final phoneCodeAutoRetrievalTimeout = (String verId) {
         this.verID = verId;
-        verifyStream.close();
+        eventStream.close();
       };
 
       // Calling verifyPhoneNumber
@@ -97,6 +96,8 @@ class AuthProvider {
           verificationFailed: phoneVerificationFailed,
           codeSent: otpSent,
           codeAutoRetrievalTimeout: phoneCodeAutoRetrievalTimeout);
+
+      yield* eventStream.stream;
     }
   }
 
