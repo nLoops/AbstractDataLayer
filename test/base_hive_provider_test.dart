@@ -15,8 +15,7 @@ void main() {
   group('Hive provider unit test', () {
     setUpAll(() {
       _box = HiveBoxMock([]);
-      _hiveProvider = HiveImpl(
-          key: key, box: _box, streamController: StreamController.broadcast());
+      _hiveProvider = HiveImpl(key: key, box: _box);
       _sample = Sample(uid: '100', title: 'Ahmed', qty: 1);
     });
 
