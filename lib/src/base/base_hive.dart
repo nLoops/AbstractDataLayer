@@ -29,14 +29,11 @@ abstract class BaseHive extends BaseCrudOperations {
 
 /// An implementation of [BaseHive] logic.
 class HiveImpl extends BaseHive {
-  HiveImpl({@required String key, Box box, StreamController streamController}) {
+  HiveImpl({@required String key, Box box}) {
     assert(key != null);
 
     /// Current box key
     this._key = key;
-
-    /// Stream controller holds box data
-    this._controller = streamController ?? StreamController.broadcast();
 
     /// Current box
     if (box == null) {
@@ -46,7 +43,6 @@ class HiveImpl extends BaseHive {
     }
   }
 
-  StreamController _controller;
   String _key;
   Box _box;
 
@@ -95,9 +91,7 @@ class HiveImpl extends BaseHive {
   }
 
   @override
-  void dispose() {
-    _controller?.close();
-  }
+  void dispose() {}
 
   @override
   Future<void> clear() => _box.clear();
