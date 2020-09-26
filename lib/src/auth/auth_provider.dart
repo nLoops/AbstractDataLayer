@@ -23,7 +23,7 @@ bool isValidPhoneNumber(String phoneNo) {
   }
 }
 
-void logger(String msg) => debugPrint('AUTH: ====== $msg ======');
+void logAuth(String msg) => debugPrint('AUTH: ====== $msg ======');
 
 class AuthProvider {
   static final AuthProvider _instance = AuthProvider._internal();
@@ -72,7 +72,7 @@ class AuthProvider {
 
       // In case phone verification failed
       final phoneVerificationFailed = (FirebaseAuthException exception) {
-        logger('Auth failed with exception \n ${exception.message}');
+        logAuth('Auth failed with exception \n ${exception.message}');
         verifyStream.add(kVFailed);
         //verifyStream.close();
       };
@@ -116,11 +116,11 @@ class AuthProvider {
       if (result.user != null) {
         return true;
       } else {
-        logger('Auth with credential failed.');
+        logAuth('Auth with credential failed.');
         return false;
       }
     } catch (e) {
-      logger('Auth with credential failed with error\n$e');
+      logAuth('Auth with credential failed with error\n$e');
       return false;
     }
   }
