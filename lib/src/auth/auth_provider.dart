@@ -96,9 +96,8 @@ class AuthProvider {
           verificationFailed: phoneVerificationFailed,
           codeSent: otpSent,
           codeAutoRetrievalTimeout: phoneCodeAutoRetrievalTimeout);
-
-      yield* eventStream.stream;
     }
+    yield* eventStream.stream;
   }
 
   Future<bool> authByPhoneNumber(String otp) async {
