@@ -94,5 +94,8 @@ class HiveImpl extends BaseHive {
   void dispose() {}
 
   @override
-  Future<void> clear() => _box.clear();
+  Future<void> clear() async {
+    if (_box == null) await init();
+    return _box.clear();
+  }
 }
