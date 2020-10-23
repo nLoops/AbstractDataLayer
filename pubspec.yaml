@@ -16,7 +16,7 @@ dependencies:
   cloud_firestore: "^0.14.0+2"
   hive: "1.4.4"
 
-  firebase_auth: "0.18.0+1"
+  firebase_auth: "0.18.1+2"
 
 dev_dependencies:
   flutter_test:
